@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Chukta</string>
+    <string name="title_activity_main">Chukta</string>
+    <string name="package_name">com.suvanbanerjee.chukta</string>
+    <string name="custom_url_scheme">com.suvanbanerjee.chukta</string>
+</resources>
