@@ -6,15 +6,30 @@ import { useAppStore } from '../store/useStore';
 import NavBar from '../components/NavBar';
 import { Button, Card, Input, Tabs } from '../components/ui';
 import Link from 'next/link';
-import { IoAddCircleOutline, IoArrowBack } from 'react-icons/io5';
+import { IoAddCircleOutline, IoArrowBack, IoTrashBinOutline } from 'react-icons/io5';
+import { Dialog } from '@capacitor/dialog';
 
 // Create a component that uses useSearchParams
 function TransactionsContent() {
   const searchParams = useSearchParams();
   const friendId = searchParams.get('friend');
-  const { friends, transactions } = useAppStore();
+  const { friends, transactions, currency, removeTransaction } = useAppStore();
   const [activeTab, setActiveTab] = useState('all');
   const [searchText, setSearchText] = useState('');
+  
+  // Handle delete click with native confirm dialog
+  const handleDeleteClick = async (transactionId: string) => {
+    const { value } = await Dialog.confirm({
+      title: 'Delete Transaction',
+      message: 'Are you sure you want to delete this transaction? This action cannot be undone.',
+      okButtonTitle: 'Delete',
+      cancelButtonTitle: 'Cancel'
+    });
+    
+    if (value) {
+      removeTransaction(transactionId);
+    }
+  };
   
   // Filter transactions based on friend if specified
   let filteredTransactions = friendId 
@@ -88,6 +103,7 @@ function TransactionsContent() {
         </Link>
       </div>
       
+      
       {filteredTransactions.length > 0 ? (
         <div className="space-y-4">
           {filteredTransactions.map(transaction => {
@@ -96,11 +112,20 @@ function TransactionsContent() {
               <Card key={transaction.id}>
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="font-medium">{transaction.description}</h3>
-                  <span className={`text-sm font-medium ${
-                    transaction.type === 'lent' ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                    {transaction.type === 'lent' ? '+' : '-'}₹{transaction.amount.toFixed(2)}
-                  </span>
+                  <div className="flex items-center gap-3">
+                    <span className={`text-sm font-medium ${
+                      transaction.type === 'lent' ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                      {transaction.type === 'lent' ? '+' : '-'}{currency}{transaction.amount.toFixed(2)}
+                    </span>
+                    <button 
+                      onClick={() => handleDeleteClick(transaction.id)}
+                      className="text-foreground/60 hover:text-red-500 transition-colors"
+                      aria-label="Delete transaction"
+                    >
+                      <IoTrashBinOutline size={18} />
+                    </button>
+                  </div>
                 </div>
                 
                 <div className="flex justify-between text-xs text-foreground/70">

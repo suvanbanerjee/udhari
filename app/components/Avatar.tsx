@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { createAvatar } from '@dicebear/core';
-import { loreleiNeutral } from '@dicebear/collection';
+import { adventurerNeutral } from '@dicebear/collection';
 
 interface AvatarProps {
   seed: string;
@@ -15,7 +15,7 @@ export default function Avatar({ seed, size = 40, className = '' }: AvatarProps)
 
   useEffect(() => {
     // Create avatar with the provided seed
-    const avatar = createAvatar(loreleiNeutral, {
+    const avatar = createAvatar(adventurerNeutral, {
       seed,
       radius: 50
     });

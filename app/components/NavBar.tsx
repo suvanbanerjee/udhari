@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IoEllipseOutline, IoReceiptOutline, IoSettingsOutline } from 'react-icons/io5';
+import { IoEllipseOutline, IoReceiptOutline, IoSettingsOutline, IoAdd  } from 'react-icons/io5';
 import { IoInformation } from 'react-icons/io5';
 
 export default function NavBar() {
@@ -14,6 +14,11 @@ export default function NavBar() {
       icon: <IoEllipseOutline size={24} />,
       label: 'Friends',
       path: '/',
+    },
+        {
+      icon: <IoAdd size={24} />,
+      label: 'Add',
+      path: '/transactions/add',
     },
     {
       icon: <IoReceiptOutline size={24} />,

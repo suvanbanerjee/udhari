@@ -14,7 +14,7 @@ function SettleUpContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const friendId = searchParams?.get('id');
-  const { friends, transactions, removeTransactionsByFriendId } = useAppStore();
+  const { friends, transactions, removeTransactionsByFriendId, currency, showAppName, customMessage } = useAppStore();
   const friend = friends.find(f => f.id === friendId);
   
   // If friend not found, redirect to home
@@ -56,14 +56,14 @@ function SettleUpContent() {
 
 Here's our money status:
 
-${isPositive ? 'You owe me' : 'I owe you'}: ₹${absBalance.toFixed(2)}
+${isPositive ? 'You owe me' : 'I owe you'}: ${currency}${absBalance.toFixed(2)}
 
 Transaction history:
 ${recentTransactions.map(t => 
-  `• ${new Date(t.date).toLocaleDateString()}: ${t.description} - ₹${t.amount.toFixed(2)} (${t.type === 'lent' ? 'I paid' : 'You paid'})`
+  `• ${new Date(t.date).toLocaleDateString()}: ${t.description} - ${currency}${t.amount.toFixed(2)} (${t.type === 'lent' ? 'I paid' : 'You paid'})`
 ).join('\n')}
 
-Sent from Chukta app`;
+${customMessage ? customMessage + '\n' : ''}${showAppName ? 'Sent from Udhari app' : ''}`;
 
       await Share.share({
         title: `Settlement with ${friend.name}`,
@@ -112,10 +112,10 @@ Sent from Chukta app`;
         <div className={`flex justify-center mb-4 ${
           isPositive ? 'text-green-600 dark:text-green-400' : 
           isNegative ? 'text-red-600 dark:text-red-400' : 
-          'text-gray-600 dark:text-gray-400'
+          'text-gray-400 dark:text-gray-400'
         }`}>
           <div className="text-center">
-            <span className="text-3xl font-bold">₹{absBalance.toFixed(2)}</span>
+            <span className="text-3xl font-bold">{currency}{absBalance.toFixed(2)}</span>
           </div>
         </div>
         
@@ -123,20 +123,20 @@ Sent from Chukta app`;
         <div className="flex justify-between items-center text-sm bg-foreground/5 p-3 rounded-lg">
           <div className="flex flex-col items-center">
             <span className="text-xs text-foreground/70">You paid</span>
-            <span className="font-medium">₹{lent.toFixed(2)}</span>
+            <span className="font-medium">{currency}{lent.toFixed(2)}</span>
           </div>
           
           <div className="h-8 border-r border-foreground/20"></div>
           
           <div className="flex flex-col items-center">
             <span className="text-xs text-foreground/70">Friend paid</span>
-            <span className="font-medium">₹{received.toFixed(2)}</span>
+            <span className="font-medium">{currency}{received.toFixed(2)}</span>
           </div>
         </div>
       </Card>
       
       {/* Always show payment instructions */}
-      <div className="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 p-3 rounded-lg mb-5">
+      <div className="p-3 rounded-lg mb-5">
         <h3 className="font-medium mb-1">Payment Instructions</h3>
         <p className="text-sm mb-1">
           1. Share payment details with your friend via WhatsApp, SMS or any other app

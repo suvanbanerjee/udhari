@@ -11,7 +11,7 @@ import { IoAddCircleOutline, IoSearch } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 
 export default function Home() {
-  const { isFirstStartup, friends, transactions } = useAppStore();
+  const { isFirstStartup, friends, transactions, currency } = useAppStore();
   const [searchTerm, setSearchTerm] = useState('');
   
   // Check if it's first startup
@@ -61,9 +61,9 @@ export default function Home() {
           </div>
           <Card className="py-1.5 px-3 flex items-center gap-2">
             <div className="text-xs font-mono">
-              <span className="text-green-600">₹{totalLent.toFixed(2)}</span>
+              <span className="text-green-600">{currency}{totalLent.toFixed(2)}</span>
               <span className="mx-1">/</span>
-              <span className="text-red-600">₹{totalReceived.toFixed(2)}</span>
+              <span className="text-red-600">{currency}{totalReceived.toFixed(2)}</span>
             </div>
           </Card>
         </div>
@@ -87,6 +87,7 @@ export default function Home() {
                 id={friend.id} 
                 name={friend.name} 
                 transactions={transactions.filter(t => t.friendId === friend.id)}
+                currency={currency}
               />
             </motion.div>
           ))}
@@ -96,25 +97,16 @@ export default function Home() {
           <p className="text-foreground/70">No friends match your search</p>
         </div>
       ) : (
-        <motion.div 
-          className="mt-12 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-        >
-          <motion.div 
-            className="mb-6 w-24 h-24 mx-auto bg-foreground/5 rounded-full flex items-center justify-center"
-            animate={{ y: [0, -10, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          >
+        <div className="mt-12 text-center">
+          <div className="mb-6 w-24 h-24 mx-auto bg-foreground/5 rounded-full flex items-center justify-center">
             <div className="dot-pattern absolute inset-0 opacity-10 rounded-full"></div>
             <IoAddCircleOutline size={48} className="text-foreground/50" />
-          </motion.div>
-          <p className="text-foreground/70 mb-4 font-mono">Your squad list is empty! 🙈</p>
-          <Link href="/settings">
-            <Button>Add Your Squad</Button>
+          </div>
+          <p className="text-foreground/70 mb-4 font-mono">Your squad list is empty!</p>
+            <Link href="/settings" className="block mx-auto">
+            <Button className="mx-auto">Add Your Squad</Button>
           </Link>
-        </motion.div>
+        </div>
       )}
       
       <NavBar />
@@ -125,6 +117,7 @@ export default function Home() {
 interface FriendCardProps {
   id: string;
   name: string;
+  currency: string;
   transactions: Array<{
     id: string;
     friendId: string;
@@ -135,7 +128,7 @@ interface FriendCardProps {
   }>;
 }
 
-function FriendCard({ id, name, transactions }: FriendCardProps) {
+function FriendCard({ id, name, transactions, currency }: FriendCardProps) {
   // Calculate total amount lent to this friend
   const lent = transactions
     .filter(t => t.type === 'lent')
@@ -172,7 +165,7 @@ function FriendCard({ id, name, transactions }: FriendCardProps) {
           }}
         >
           <p className="text-xs text-foreground/70 mb-1 font-mono">You Paid</p>
-          <p className="font-medium font-mono">₹{lent.toFixed(2)}</p>
+          <p className="font-medium font-mono">{currency}{lent.toFixed(2)}</p>
         </div>
         
         <div 
@@ -184,7 +177,7 @@ function FriendCard({ id, name, transactions }: FriendCardProps) {
         >
           <p className="text-xs text-foreground/70 mb-1 font-mono">Overall</p>
           <p className={`font-medium font-mono ${balance > 0 ? 'text-green-600' : balance < 0 ? 'text-red-600' : ''}`}>
-            ₹{Math.abs(balance).toFixed(2)}
+            {currency}{Math.abs(balance).toFixed(2)}
             <span className="text-xs ml-1">{balance > 0 ? `${name} owes` : balance < 0 ? 'you owe' : ''}</span>
           </p>
         </div>

@@ -14,7 +14,7 @@ function TransactionForm() {
   const preselectedFriendId = searchParams.get('friend');
   const isPartialPayment = searchParams.get('type') === 'partial';
   
-  const { friends, addTransaction, transactions } = useAppStore();
+  const { friends, addTransaction, transactions, currency } = useAppStore();
   const [transactionType, setTransactionType] = useState<'lent' | 'received'>('lent');
   const [friendId, setFriendId] = useState(preselectedFriendId || '');
   const [amount, setAmount] = useState('');
@@ -117,17 +117,26 @@ function TransactionForm() {
         </select>
       </div>
       
-      <Input
-        label="Amount"
-        type="number"
-        placeholder="Enter amount"
-        fullWidth
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        min="0.01"
-        step="0.01"
-        required
-      />
+      <div>
+        <label className="block mb-1.5 text-sm font-medium text-foreground/80">
+          Amount
+        </label>
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/70">
+            {currency}
+          </span>
+          <input
+            type="number"
+            placeholder="Enter amount"
+            className="w-full py-2.5 px-3 pl-7 rounded-lg bg-element-bg shadow-sm focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all duration-300"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            min="0.01"
+            step="0.01"
+            required
+          />
+        </div>
+      </div>
       
       <Input
         label="Description"
@@ -162,11 +171,21 @@ function LoadingForm() {
 }
 
 export default function AddTransactionPage() {
+  return (
+    <div className="p-6 pb-20">
+      <Suspense fallback={<LoadingForm />}>
+        <AddTransactionContent />
+      </Suspense>
+    </div>
+  );
+}
+
+function AddTransactionContent() {
   const searchParams = useSearchParams();
   const isPartialPayment = searchParams.get('type') === 'partial';
 
   return (
-    <div className="p-6 pb-20">
+    <>
       <header className="mb-6 flex items-center gap-2">
         <Link href="/transactions" className="p-1">
           <IoArrowBack />
@@ -176,9 +195,7 @@ export default function AddTransactionPage() {
         </h1>
       </header>
       
-      <Suspense fallback={<LoadingForm />}>
-        <TransactionForm />
-      </Suspense>
-    </div>
+      <TransactionForm />
+    </>
   );
 }

@@ -4,12 +4,29 @@ import React, { useState } from 'react';
 import { useAppStore, ThemeType } from '../store/useStore';
 import NavBar from '../components/NavBar';
 import { Button, Card, Input } from '../components/ui';
-import { IoPersonAdd, IoTrashOutline, IoSaveOutline, IoSunnyOutline, IoMoonOutline, IoColorPaletteOutline } from 'react-icons/io5';
+import { IoPersonAdd, IoTrashOutline, IoSaveOutline, IoCashOutline, IoCheckmarkCircleOutline, IoEyeOutline } from 'react-icons/io5';
 
 export default function SettingsPage() {
-  const { friends, addFriend, updateFriend, removeFriend, theme, setTheme } = useAppStore();
+  const { 
+    friends, 
+    addFriend, 
+    updateFriend, 
+    removeFriend, 
+    theme, 
+    setTheme, 
+    currency, 
+    setCurrency, 
+    showAppName, 
+    setShowAppName, 
+    customMessage, 
+    setCustomMessage 
+  } = useAppStore();
+  
   const [newFriendName, setNewFriendName] = useState('');
   const [editMode, setEditMode] = useState<{[key: string]: string}>({});
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewFriendName, setPreviewFriendName] = useState('Friend');
+  const [previewAmount, setPreviewAmount] = useState('500');
   
   const handleAddFriend = () => {
     if (newFriendName.trim()) {
@@ -49,6 +66,29 @@ export default function SettingsPage() {
     setTheme(newTheme);
   };
 
+  const handleCurrencyChange = (newCurrency: string) => {
+    setCurrency(newCurrency);
+  };
+
+  const togglePreview = () => {
+    setShowPreview(!showPreview);
+  };
+
+  const getMessagePreview = () => {
+    const message = `Hey ${previewFriendName}! 
+
+Here's our money status:
+
+You owe me: ${currency}${previewAmount}
+
+Transaction history:
+• ${new Date().toLocaleDateString()}: Dinner - ${currency}${previewAmount} (I paid)
+
+${customMessage ? customMessage + '\n' : ''}${showAppName ? 'Sent from Udhari app' : ''}`;
+
+    return message;
+  };
+
   return (
     <div className="p-4 pb-20 max-w-md mx-auto">
       <header className="mb-4">
@@ -72,6 +112,74 @@ export default function SettingsPage() {
         Select your preferred theme appearance
         </div>
       </div>
+      </Card>
+      
+      <Card className="mb-6 p-4">
+        <h2 className="text-lg font-semibold mb-3">Currency Settings</h2>
+        <div className="flex flex-col gap-2">
+          <select
+            className="w-full p-2 rounded-md"
+            value={currency}
+            onChange={(e) => handleCurrencyChange(e.target.value)}
+          >
+            <option value="₹">Indian Rupee (₹)</option>
+            <option value="$">US Dollar ($)</option>
+            <option value="€">Euro (€)</option>
+            <option value="£">British Pound (£)</option>
+            <option value="¥">Japanese Yen (¥)</option>
+          </select>
+          <div className="text-xs text-foreground/70 mt-1">
+            Select your preferred currency symbol
+          </div>
+        </div>
+      </Card>
+      
+      <Card className="mb-6 p-4">
+        <h2 className="text-lg font-semibold mb-3">Settlement Message</h2>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="showAppName"
+              checked={showAppName}
+              onChange={() => setShowAppName(!showAppName)}
+              className="h-4 w-4"
+            />
+            <label htmlFor="showAppName" className="text-sm">Show "Sent by Udhari app" in messages</label>
+          </div>
+          
+          <div>
+            <label className="text-sm block mb-1">Custom message (optional):</label>
+            <Input
+              placeholder="Add your custom message here..."
+              value={customMessage}
+              onChange={(e) => setCustomMessage(e.target.value)}
+              fullWidth
+            />
+            <p className="text-xs text-foreground/70 mt-1">
+              This message will appear at the end of settlement messages
+            </p>
+          </div>
+          
+          <div className="mt-2">
+            <Button 
+              variant="outline" 
+              onClick={togglePreview}
+              className="flex items-center gap-2 w-full justify-center"
+            >
+            {showPreview ? 'Hide Preview' : 'Show Preview'}
+            </Button>
+            
+            {showPreview && (
+              <div className="mt-3 p-3 bg-foreground/5 rounded-lg">
+                <h3 className="text-sm font-medium mb-2">Message Preview:</h3>
+                <pre className="whitespace-pre-wrap text-xs p-2 bg-background rounded">
+                  {getMessagePreview()}
+                </pre>
+              </div>
+            )}
+          </div>
+        </div>
       </Card>
       
       <Card className="mb-6 p-4">

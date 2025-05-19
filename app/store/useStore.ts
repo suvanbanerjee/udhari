@@ -22,15 +22,22 @@ interface AppState {
   transactions: Transaction[];
   isFirstStartup: boolean;
   theme: ThemeType;
+  currency: string;
+  showAppName: boolean;
+  customMessage: string;
   
   // Actions
   addFriend: (name: string) => void;
   updateFriend: (id: string, name: string) => void;
   removeFriend: (id: string) => void;
   addTransaction: (transaction: Omit<Transaction, 'id'>) => void;
+  removeTransaction: (id: string) => void;
   removeTransactionsByFriendId: (friendId: string) => void;
   markFirstStartupComplete: () => void;
   setTheme: (theme: ThemeType) => void;
+  setCurrency: (currency: string) => void;
+  setShowAppName: (show: boolean) => void;
+  setCustomMessage: (message: string) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -40,6 +47,9 @@ export const useAppStore = create<AppState>()(
       transactions: [],
       isFirstStartup: true,
       theme: 'gray',
+      currency: '₹', // Default to rupee
+      showAppName: true,
+      customMessage: '',
 
       addFriend: (name) => set((state) => ({
         friends: [...state.friends, { id: crypto.randomUUID(), name }]
@@ -60,6 +70,10 @@ export const useAppStore = create<AppState>()(
         transactions: [...state.transactions, { id: crypto.randomUUID(), ...transaction }]
       })),
 
+      removeTransaction: (id) => set((state) => ({
+        transactions: state.transactions.filter((transaction) => transaction.id !== id)
+      })),
+      
       removeTransactionsByFriendId: (friendId) => set((state) => ({
         transactions: state.transactions.filter((transaction) => transaction.friendId !== friendId)
       })),
@@ -67,6 +81,12 @@ export const useAppStore = create<AppState>()(
       markFirstStartupComplete: () => set({ isFirstStartup: false }),
 
       setTheme: (theme) => set({ theme }),
+      
+      setCurrency: (currency) => set({ currency }),
+      
+      setShowAppName: (show) => set({ showAppName: show }),
+      
+      setCustomMessage: (message) => set({ customMessage: message }),
     }),
     {
       name: 'udhari-storage',

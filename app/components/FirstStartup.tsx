@@ -33,17 +33,17 @@ export default function FirstStartup() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col p-6 pb-8">
+    <div className="flex flex-col p-6 pb-8">
       <div className="flex-grow">
         <div className="mb-5 text-center">
-          <h1 className="text-2xl font-bold mb-2">Welcome to <span className="gradient-text">Udhari</span>! 🎉</h1>
+          <h1 className="text-2xl font-bold mb-2">Welcome to Udhari!</h1>
           <p className="text-foreground/70">Let's add your squad to get started</p>
         </div>
       
         <Card className="mb-5">
           <div className="flex gap-3">
             <Input
-              placeholder="Friend's name"
+              placeholder="Friend's nick name"
               fullWidth
               value={friendName}
               onChange={(e) => setFriendName(e.target.value)}
@@ -56,7 +56,7 @@ export default function FirstStartup() {
         </Card>
         
         {friends.length > 0 && (
-          <Card className="mb-5 max-h-[40vh] overflow-y-auto">
+          <Card className="mb-5 overflow-y-auto">
             <h2 className="text-sm font-medium text-foreground/70 mb-3">Friends added</h2>
             <div className="space-y-2">
               {friends.map((friend) => (
@@ -78,12 +78,12 @@ export default function FirstStartup() {
         )}
       </div>
       
-      <div className="sticky bottom-0 pt-4 w-full">
+      <div className="fixed bottom-0 left-0 right-0 p-4 w-full">
         <Button 
           fullWidth 
           onClick={handleComplete}
           disabled={friends.length === 0}
-          className="shadow-md"
+          variant='primary'
         >
           Continue
         </Button>

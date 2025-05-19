@@ -1,4 +1,4 @@
-package com.suvanbanerjee.chukta;
+package com.suvanbanerjee.udhari;
 
 import com.getcapacitor.BridgeActivity;
 
