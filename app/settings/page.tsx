@@ -90,7 +90,7 @@ ${customMessage ? customMessage + '\n' : ''}${showAppName ? 'Sent from Udhari ap
   };
 
   return (
-    <div className="p-4 pb-20 max-w-md mx-auto">
+    <div className="p-4 pb-20 mx-auto">
       <header className="mb-4">
       <h1 className="text-2xl font-bold">Settings</h1>
       <p className="text-foreground/70 text-sm">Manage your friends and preferences</p>
