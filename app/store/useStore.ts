@@ -6,6 +6,11 @@ export interface Friend {
   name: string;
 }
 
+export interface SplitDetail {
+  friendId: string;
+  amount: number;
+}
+
 export interface Transaction {
   id: string;
   friendId: string;
@@ -13,6 +18,8 @@ export interface Transaction {
   date: string; // ISO string
   type: 'lent' | 'received';
   description: string;
+  isGroupExpense?: boolean;
+  splitDetails?: SplitDetail[];
 }
 
 export type ThemeType = 'light' | 'dark' | 'amoled' | 'gray';

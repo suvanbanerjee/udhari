@@ -34,6 +34,3 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-
-export CAPACITOR_ANDROID_STUDIO_PATH="/var/lib/flatpak/app/com.google.AndroidStudio/x86_64/stable/6505fd45062427739e5f9f89ea11333b12dc2ec2ab7e48c18b0e766388b5ca3c/files/extra/android-studio/bin/studio.sh"

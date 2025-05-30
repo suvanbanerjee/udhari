@@ -68,10 +68,20 @@ function TransactionForm() {
     } else {
       if (selectedFriends.length > 0) {
         setFriendId(selectedFriends[0]);
+      }
+      setSelectedFriends([]);
+    }
+  }, [isGroupExpense]);
         setSelectedFriends([]);
       }
+      setFriendId('');
+    } else {
+      if (selectedFriends.length > 0) {
+        setFriendId(selectedFriends[0]);
+      }
+      setSelectedFriends([]);
     }
-  }, [isGroupExpense, friendId]);
+  }, [isGroupExpense]);
   
   // Calculate the splits based on the selected split type
   const calculateSplits = (): {[key: string]: number} => {
@@ -243,7 +253,7 @@ function TransactionForm() {
   // Calculate total from custom splits
   const calculateTotalFromSplits = () => {
     if (splitType === 'exact') {
-      return Object.values(customSplits).reduce((sum, val) => sum + (val as number), 0);
+      return Object.values(customSplits).reduce((sum, val) => sum + val, 0);
     }
     return parseFloat(amount || '0');
   };
@@ -253,12 +263,12 @@ function TransactionForm() {
     if (!amount) return 0;
     
     const totalAmount = parseFloat(amount);
-    const totalAssigned = Object.values(customSplits).reduce((sum, val) => sum + (val as number), 0);
+    const totalAssigned = Object.values(customSplits).reduce((sum, val) => sum + val, 0);
     
     if (splitType === 'exact') {
       return totalAmount - totalAssigned;
     } else if (splitType === 'percentage') {
-      const totalPercentage = Object.values(customSplits).reduce((sum, val) => sum + (val as number), 0);
+      const totalPercentage = Object.values(customSplits).reduce((sum, val) => sum + val, 0);
       return shouldSplitWithYou ? 100 - totalPercentage : 100 - totalPercentage;
     }
     
@@ -493,7 +503,7 @@ function TransactionForm() {
                 <div className="flex justify-between items-center mt-2 pt-2 border-t">
                   <span className="font-medium">Total:</span>
                   <span>
-                    {Object.values(customSplits).reduce((sum, val) => sum + (val as number), 0)}% / 100%
+                    {Object.values(customSplits).reduce((sum, val) => sum + val, 0)}% / 100%
                   </span>
                 </div>
               )}
@@ -501,7 +511,7 @@ function TransactionForm() {
           )}
           
           {splitType === 'equal' && (
-            <div className="bg-element-bg rounded-lg p-3 mb-3">
+            <div className="bg-element-bg rounded-lg p-3 mb-3"></div>
               <div className="flex justify-between items-center">
                 <span>Each person pays:</span>
                 <span className="font-medium">

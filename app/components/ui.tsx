@@ -101,9 +101,10 @@ interface TabsProps {
   tabs: { id: string; label: string; icon?: React.ReactNode }[];
   activeTab: string;
   onChange: (tabId: string) => void;
+  preventDefault?: boolean;
 }
 
-export const Tabs = ({ tabs, activeTab, onChange }: TabsProps) => {
+export const Tabs = ({ tabs, activeTab, onChange, preventDefault = false }: TabsProps) => {
   return (
     <div 
       className="flex w-full p-1 rounded-lg bg-element-bg"
@@ -111,12 +112,16 @@ export const Tabs = ({ tabs, activeTab, onChange }: TabsProps) => {
       {tabs.map((tab) => (
       <button
         key={tab.id}
+        type="button"
         className={`flex items-center justify-center gap-2 py-2 px-4 rounded-md flex-1 text-sm font-medium transition-all duration-200 ${
         activeTab === tab.id
           ? 'bg-stone-800 text-white rounded-md shadow-sm'
           : 'text-foreground/70 hover:text-foreground/90 hover:bg-element-hover'
         }`}
-        onClick={() => onChange(tab.id)}
+        onClick={(e) => {
+          if (preventDefault) e.preventDefault();
+          onChange(tab.id);
+        }}
       >
         {tab.icon}
         {tab.label}

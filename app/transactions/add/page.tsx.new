@@ -68,10 +68,10 @@ function TransactionForm() {
     } else {
       if (selectedFriends.length > 0) {
         setFriendId(selectedFriends[0]);
-        setSelectedFriends([]);
       }
+      setSelectedFriends([]);
     }
-  }, [isGroupExpense, friendId]);
+  }, [isGroupExpense, friendId, selectedFriends]);
   
   // Calculate the splits based on the selected split type
   const calculateSplits = (): {[key: string]: number} => {
