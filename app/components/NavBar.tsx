@@ -9,6 +9,9 @@ import { IoInformation } from 'react-icons/io5';
 export default function NavBar() {
   const pathname = usePathname();
 
+  // This component is kept for reference but no longer used in the layout
+  // We're now using FloatingBubble.tsx instead
+  // You can safely delete this file if you want to use only the floating bubble
   const navItems = [
     {
       icon: <IoEllipseOutline size={24} />,

@@ -112,6 +112,26 @@ body {
   100% { transform: translateY(0px); }
 }
 
+@keyframes pop-in {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spin-in {
+  0% { transform: scale(0) rotate(-90deg); opacity: 0; }
+  70% { transform: scale(1.1) rotate(0deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes bubble-pop {
+  0% { transform: scale(0.8); }
+  40% { transform: scale(1.15); }
+  60% { transform: scale(0.9); }
+  80% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
 /* Enhanced UI Styles */
 .gradient-text {
   background: linear-gradient(90deg, #ff3d3d 0%, #ff0000 50%, #cc0000 100%);
@@ -179,3 +199,27 @@ body {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+
+/* Rounded black border for input boxes */
+input,
+textarea {
+  border: 1px solid var(--element-bg);
+  color: var(--foreground);
+}
+
+/* hide scroll bar */
+
+body{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+main{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: -20px;
+    right: -20px; 
+    overflow: scroll;
+ }

@@ -156,7 +156,7 @@ export default function TransactionsPage() {
       <Suspense fallback={<TransactionsLoading />}>
         <TransactionsContent />
       </Suspense>
-      <NavBar />
+      {/* <NavBar /> */}
     </div>
   );
 }

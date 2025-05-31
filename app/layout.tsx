@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { useAppStore } from "./store/useStore";
 import BackButtonHandler from "./components/BackButtonHandler";
+import FloatingBubble from "./components/FloatingBubble";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,6 +42,7 @@ export default function RootLayout({
         <main className="pb-20 relative">
           <BackButtonHandler />
           {children}
+          <FloatingBubble />
         </main>
       </body>
     </html>

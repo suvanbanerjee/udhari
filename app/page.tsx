@@ -152,7 +152,7 @@ export default function Home() {
         </div>
       )}
       
-      <NavBar />
+      {/* <NavBar /> */}
     </div>
   );
 }
@@ -237,7 +237,7 @@ function FriendCard({ id, name, transactions, currency }: FriendCardProps) {
         <Link href={`/settle-up?id=${id}`} className="flex-1">
           <motion.div whileTap={{ scale: 0.98 }}>
             <Button fullWidth className="py-1.5" variant='primary'>
-              Square Up
+              Settle
             </Button>
           </motion.div>
         </Link>

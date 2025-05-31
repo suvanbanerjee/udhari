@@ -259,7 +259,7 @@ ${customMessage ? customMessage + '\n' : ''}${showAppName ? 'Sent from Udhari ap
         )}
       </Card>
       
-      <NavBar />
+      {/* <NavBar /> */}
     </div>
   );
 }

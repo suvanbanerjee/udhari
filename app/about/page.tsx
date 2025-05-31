@@ -51,7 +51,7 @@ export default function AboutPage() {
         </motion.div>
       </div>
       
-      <NavBar />
+      {/* <NavBar /> */}
     </div>
   );
 }
