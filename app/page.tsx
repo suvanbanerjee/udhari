@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppStore } from './store/useStore';
 import FirstStartup from './components/FirstStartup';
 import NavBar from './components/NavBar';
@@ -13,8 +13,51 @@ import { motion } from 'framer-motion';
 export default function Home() {
   const { isFirstStartup, friends, transactions, currency } = useAppStore();
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   
-  // Check if it's first startup
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+        <div className="relative h-32 w-32">
+          {/* Monopoly-style money */}
+          <div
+            className="absolute animate-bounce"
+            style={{ left: '25%', zIndex: 3, animationDelay: '0.1s' }}
+          >
+            <div className="w-16 h-10 bg-green-500 rounded-md flex items-center justify-center border-2 border-green-700 shadow-lg">
+              <span className="text-white font-bold">50</span>
+            </div>
+          </div>
+          
+          <div
+            className="absolute animate-bounce"
+            style={{ left: '10%', top: '30px', zIndex: 2, animationDelay: '0.3s' }}
+          >
+            <div className="w-16 h-10 bg-orange-400 rounded-md flex items-center justify-center border-2 border-orange-600 shadow-lg">
+              <span className="text-white font-bold">10</span>
+            </div>
+          </div>
+          
+          <div
+            className="absolute animate-bounce"
+            style={{ left: '40%', top: '15px', zIndex: 1, animationDelay: '0.2s' }}
+          >
+            <div className="w-16 h-10 bg-blue-500 rounded-md flex items-center justify-center border-2 border-blue-700 shadow-lg">
+              <span className="text-white font-bold">1</span>
+            </div>
+          </div>
+        </div>
+        
+        <p className="text-lg text-foreground font-bold mt-4">
+          Counting your cash...
+        </p>
+      </div>
+    );
+  }
+  
   if (isFirstStartup) {
     return <FirstStartup />;
   }
