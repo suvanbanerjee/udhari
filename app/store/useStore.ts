@@ -32,6 +32,8 @@ interface AppState {
   currency: string;
   showAppName: boolean;
   customMessage: string;
+  upiVpa: string;
+  enableUpiPayment: boolean;
   
   // Actions
   addFriend: (name: string) => void;
@@ -45,6 +47,8 @@ interface AppState {
   setCurrency: (currency: string) => void;
   setShowAppName: (show: boolean) => void;
   setCustomMessage: (message: string) => void;
+  setUpiVpa: (vpa: string) => void;
+  setEnableUpiPayment: (enable: boolean) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -57,6 +61,8 @@ export const useAppStore = create<AppState>()(
       currency: '₹', // Default to rupee
       showAppName: true,
       customMessage: '',
+      upiVpa: '',
+      enableUpiPayment: false,
 
       addFriend: (name) => set((state) => ({
         friends: [...state.friends, { id: crypto.randomUUID(), name }]
@@ -94,6 +100,10 @@ export const useAppStore = create<AppState>()(
       setShowAppName: (show) => set({ showAppName: show }),
       
       setCustomMessage: (message) => set({ customMessage: message }),
+      
+      setUpiVpa: (vpa) => set({ upiVpa: vpa }),
+      
+      setEnableUpiPayment: (enable) => set({ enableUpiPayment: enable }),
     }),
     {
       name: 'udhari-storage',

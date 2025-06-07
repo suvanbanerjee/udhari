@@ -1,17 +1,15 @@
 "use client";
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useAppStore, ThemeType } from '../store/useStore';
-import NavBar from '../components/NavBar';
 import { Button, Card, Input } from '../components/ui';
-import { IoPersonAdd, IoTrashOutline, IoSaveOutline, IoCashOutline, IoCheckmarkCircleOutline, IoEyeOutline } from 'react-icons/io5';
+import { IoPersonAdd, IoCashOutline, IoCheckmarkCircleOutline, IoEyeOutline } from 'react-icons/io5';
+import Avatar from '../components/Avatar';
 
 export default function SettingsPage() {
   const { 
     friends, 
-    addFriend, 
-    updateFriend, 
-    removeFriend, 
     theme, 
     setTheme, 
     currency, 
@@ -19,48 +17,16 @@ export default function SettingsPage() {
     showAppName, 
     setShowAppName, 
     customMessage, 
-    setCustomMessage 
+    setCustomMessage,
+    upiVpa,
+    setUpiVpa,
+    enableUpiPayment,
+    setEnableUpiPayment
   } = useAppStore();
   
-  const [newFriendName, setNewFriendName] = useState('');
-  const [editMode, setEditMode] = useState<{[key: string]: string}>({});
   const [showPreview, setShowPreview] = useState(false);
   const [previewFriendName, setPreviewFriendName] = useState('Friend');
   const [previewAmount, setPreviewAmount] = useState('500');
-  
-  const handleAddFriend = () => {
-    if (newFriendName.trim()) {
-      addFriend(newFriendName.trim());
-      setNewFriendName('');
-    }
-  };
-  
-  const startEdit = (id: string, name: string) => {
-    setEditMode({
-      ...editMode,
-      [id]: name
-    });
-  };
-  
-  const cancelEdit = (id: string) => {
-    const updated = { ...editMode };
-    delete updated[id];
-    setEditMode(updated);
-  };
-  
-  const saveEdit = (id: string) => {
-    const newName = editMode[id];
-    if (newName && newName.trim()) {
-      updateFriend(id, newName.trim());
-      cancelEdit(id);
-    }
-  };
-  
-  const handleDeleteFriend = (id: string) => {
-    if (confirm('Are you sure you want to delete this friend? All related transactions will also be deleted.')) {
-      removeFriend(id);
-    }
-  };
 
   const handleThemeChange = (newTheme: ThemeType) => {
     setTheme(newTheme);
@@ -75,7 +41,7 @@ export default function SettingsPage() {
   };
 
   const getMessagePreview = () => {
-    const message = `Hey ${previewFriendName}! 
+    let message = `Hey ${previewFriendName}! 
 
 Here's our money status:
 
@@ -84,7 +50,15 @@ You owe me: ${currency}${previewAmount}
 Transaction history:
 • ${new Date().toLocaleDateString()}: Dinner - ${currency}${previewAmount} (I paid)
 
-${customMessage ? customMessage + '\n' : ''}${showAppName ? 'Sent from Udhari app' : ''}`;
+`;
+
+    if (enableUpiPayment && upiVpa) {
+      // Create a mobile-friendly UPI link that works in messaging apps
+      const upiLink = `upi://pay?pa=${encodeURIComponent(upiVpa)}&pn=${encodeURIComponent('Payment via Udhari')}&am=${previewAmount}&cu=INR&tn=${encodeURIComponent('Sent through Udhari app')}`;
+      message += `Pay directly: ${upiLink}\n\n`;
+    }
+
+    message += `${customMessage ? customMessage + '\n' : ''}${showAppName ? 'Sent from Udhari app' : ''}`;
 
     return message;
   };
@@ -183,82 +157,81 @@ ${customMessage ? customMessage + '\n' : ''}${showAppName ? 'Sent from Udhari ap
       </Card>
       
       <Card className="mb-6 p-4">
-        <h2 className="text-lg font-semibold mb-3">Add Friend</h2>
-        <div className="flex gap-2">
-          <Input
-            placeholder="Friend's name"
-            fullWidth
-            value={newFriendName}
-            onChange={(e) => setNewFriendName(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleAddFriend()}
-          />
-          <Button onClick={handleAddFriend} aria-label="Add friend">
-            <IoPersonAdd />
-          </Button>
+        <h2 className="text-lg font-semibold mb-3">UPI Payment Settings</h2>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="enableUpiPayment"
+              checked={enableUpiPayment}
+              onChange={() => setEnableUpiPayment(!enableUpiPayment)}
+              className="h-4 w-4"
+            />
+            <label htmlFor="enableUpiPayment" className="text-sm">Include UPI payment link in messages</label>
+          </div>
+          
+          {enableUpiPayment && (
+            <div>
+              <label className="text-sm block mb-1">Your UPI VPA (Virtual Payment Address):</label>
+              <Input
+                placeholder="example@upi"
+                value={upiVpa}
+                onChange={(e) => setUpiVpa(e.target.value)}
+                fullWidth
+              />
+              <p className="text-xs text-foreground/70 mt-1">
+                Enter your UPI ID (e.g. 1234567890@upi, yourname@bank)
+              </p>
+            </div>
+          )}
         </div>
       </Card>
       
-      <Card className="p-4">
-        <h2 className="text-lg font-semibold mb-3">Manage Friends</h2>
-        
-        {friends.length > 0 ? (
-          <div className="space-y-2">
-            {friends.map(friend => (
-              <div key={friend.id} className="p-3 bg-foreground/5 rounded-lg">
-                {editMode[friend.id] !== undefined ? (
-                  <div className="flex gap-2">
-                    <Input
-                      fullWidth
-                      value={editMode[friend.id]}
-                      onChange={(e) => setEditMode({
-                        ...editMode, 
-                        [friend.id]: e.target.value
-                      })}
-                    />
-                    <Button 
-                      variant="secondary"
-                      onClick={() => saveEdit(friend.id)}
-                      className="p-2"
-                      aria-label="Save"
-                    >
-                      <IoSaveOutline />
-                    </Button>
-                    <Button 
-                      variant="outline"
-                      onClick={() => cancelEdit(friend.id)}
-                      className="p-2"
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">{friend.name}</span>
-                    <div className="flex gap-2">
-                      <Button 
-                        variant="secondary"
-                        onClick={() => startEdit(friend.id, friend.name)}
-                      >
-                        Edit
-                      </Button>
-                      <Button 
-                        variant="danger"
-                        onClick={() => handleDeleteFriend(friend.id)}
-                        aria-label="Delete"
-                      >
-                        <IoTrashOutline />
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+      <Card className="mb-6 p-4">
+        <h2 className="text-lg font-semibold mb-3">Friends</h2>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-medium">{friends.length} friends</p>
+              <p className="text-foreground/70 text-sm">Manage your contacts</p>
+            </div>
+            <Link href="/settings/friends">
+              <Button variant="primary" className="items-center gap-2">
+                Modify
+              </Button>
+            </Link>
           </div>
-        ) : (
-          <p className="text-center text-foreground/70 py-3">No friends added yet</p>
-        )}
+          
+          {friends.length > 0 ? (
+            <div className="grid grid-cols-2 gap-2 mt-2">
+              {friends.slice(0, 4).map(friend => (
+                <div key={friend.id} className="p-3 bg-foreground/5 rounded-lg flex items-center gap-2">
+                  <Avatar seed={friend.name} size={36} className="rounded-full shadow-sm" />
+                  <span className="font-medium truncate">{friend.name}</span>
+                </div>
+              ))}
+              {friends.length > 4 && (
+                <div className="p-3 bg-foreground/5 rounded-lg flex items-center justify-center">
+                  <Link href="/settings/friends" className="text-accent font-medium">
+                    +{friends.length - 4} more
+                  </Link>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="text-center p-3 border border-dashed border-foreground/20 rounded-lg">
+              <p className="text-foreground/70 mb-2">No friends added yet</p>
+              <Link href="/settings/friends">
+                <Button variant="secondary" className="inline-flex items-center gap-2">
+                  <IoPersonAdd />
+                  Add Friends
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
       </Card>
-      
+
       {/* <NavBar /> */}
     </div>
   );

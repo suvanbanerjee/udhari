@@ -14,7 +14,7 @@ function SettleUpContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const friendId = searchParams?.get('id');
-  const { friends, transactions, removeTransactionsByFriendId, currency, showAppName, customMessage } = useAppStore();
+  const { friends, transactions, removeTransactionsByFriendId, currency, showAppName, customMessage, upiVpa, enableUpiPayment } = useAppStore();
   const friend = friends.find(f => f.id === friendId);
   
   // If friend not found, redirect to home
@@ -52,7 +52,7 @@ function SettleUpContent() {
   // Function to share settlement details via WhatsApp
   const shareViaWhatsApp = async () => {
     try {
-      const message = `Hey ${friend.name}! 
+      let message = `Hey ${friend.name}! 
 
 Here's our money status:
 
@@ -63,7 +63,16 @@ ${recentTransactions.map(t =>
   `• ${new Date(t.date).toLocaleDateString()}: ${t.description} - ${currency}${t.amount.toFixed(2)} (${t.type === 'lent' ? 'I paid' : 'You paid'})`
 ).join('\n')}
 
-${customMessage ? customMessage + '\n' : ''}${showAppName ? 'Sent from Udhari app' : ''}`;
+`;
+
+      // Add UPI payment link if enabled and there's a positive balance (friend owes money)
+      if (enableUpiPayment && upiVpa && isPositive) {
+        // Create a mobile-friendly UPI link with proper encoding
+        const upiLink = `upi://pay?pa=${encodeURIComponent(upiVpa)}&pn=${encodeURIComponent('Payment via Udhari')}&am=${absBalance.toFixed(2)}&cu=INR&tn=${encodeURIComponent('Payment to ' + friend.name)}`;
+        message += `Pay directly via UPI: ${upiLink}\n\n`;
+      }
+
+      message += `${customMessage ? customMessage + '\n' : ''}${showAppName ? 'Sent from Udhari app' : ''}`;
 
       await Share.share({
         title: `Settlement with ${friend.name}`,
