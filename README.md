@@ -10,11 +10,13 @@
 </div>
 
 <p align="center">
-  <img src="screenshots/home_v1.png" width="200" alt="Home Screen" />
-  &nbsp;&nbsp;&nbsp;
-  <img src="screenshots/add_v1.png" width="200" alt="Add transaction" />
-  &nbsp;&nbsp;&nbsp;
-  <img src="screenshots/history_v1.png" width="200" alt="History" />
+  <img src="screenshots/home_v1.png" width="300" alt="Home Screen" style="border-radius: 10px;" />
+</p>
+
+<p align="center">
+  <a href="SCREENSHOTS.md">
+    <img src="https://img.shields.io/badge/View%20More%20Screenshots-4285F4?style=for-the-badge&logo=googlephotos&logoColor=white" height="40" />
+  </a>
 </p>
 
 ## Features
