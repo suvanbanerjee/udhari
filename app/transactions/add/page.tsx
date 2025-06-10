@@ -402,9 +402,7 @@ function TransactionForm() {
             </div>
           ) : (
             <div className="bg-element-bg rounded-lg p-3 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-medium">
-                {friends.find(f => f.id === preselectedFriendId)?.name.charAt(0).toUpperCase() || '?'}
-              </div>
+              <Avatar className='rounded-full shadow-sm' seed={friends.find(f => f.id === preselectedFriendId)?.name || "test"} size={36} />
               <span className="font-medium">{friends.find(f => f.id === preselectedFriendId)?.name || 'Unknown Friend'}</span>
             </div>
           )}
@@ -873,7 +871,7 @@ function TransactionForm() {
         <label className="block mb-1.5 text-sm font-medium text-foreground/80">Description</label>
         <div>
           <input
-            list="description-suggestions"
+            // list="description-suggestions"
             className="w-full py-2.5 px-3 rounded-lg bg-element-bg shadow-sm focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all duration-300"
             placeholder="What was this for?"
             value={description}
