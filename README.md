@@ -11,6 +11,8 @@
 
 <p align="center">
   <img src="screenshots/home_v1.png" width="300" alt="Home Screen" style="border-radius: 10px;" />
+    <img src="screenshots/add_v1.png" width="300" alt="Home Screen" style="border-radius: 10px;" />
+  
 </p>
 
 <p align="center">
