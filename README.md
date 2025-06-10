@@ -5,7 +5,7 @@
   <br />
   <p><strong>Easily split expenses with friends, roommates, and groups</strong></p>
   
-  [![GitHub release (latest by date)](https://img.shields.io/badge/release-v0.1.0-blue.svg)](https://github.com/yourusername/udhari/releases)
+  [![GitHub release (latest by date)](https://img.shields.io/badge/release-v0.1.0-blue.svg)](https://github.com/suvanbanerjee/udhari/releases)
   [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 </div>
 
@@ -47,7 +47,7 @@ Udhari is bult as a personal expense tracker for individuals to have a record of
 
 ### Android App
 
-<a href="https://github.com/yourusername/udhari/releases/latest">
+<a href="https://github.com/suvanbanerjee/udhari/releases/latest">
   <img src="https://img.shields.io/badge/Download-APK-green?style=for-the-badge&logo=android" height="40" />
 </a>
 
@@ -70,7 +70,7 @@ Udhari is bult as a personal expense tracker for individuals to have a record of
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/udhari.git
+git clone https://github.com/suvanbanerjee/udhari.git
 cd udhari
 ```
 
